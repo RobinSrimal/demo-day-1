@@ -1,5 +1,6 @@
 
 import pymysql
+import os
 
 class DBConnect:
 
@@ -7,10 +8,21 @@ class DBConnect:
     def __init__(self):
 
 
-        self.connection = pymysql.connect(host="database-1.czzraanhc7rb.eu-central-1.rds.amazonaws.com", 
-                    user= "admin", 
-                    passwd="demoday1",
-                    db="birthdays")
+        if "RDS_HOSTNAME" in os.environ:
+
+            self.database = {
+                "NAME": os.environ["RDS_DB_NAME"],
+                "USER": os.environ["RDS_USERNAME"],
+                "PASSWORD": os.environ["RDS_PASSWORD"],
+                "HOST": os.environ["RDS_HOSTNAME"],
+                "PORT": os.environ["RDS_PORT"],
+            }
+
+
+        self.connection = pymysql.connect(host=self.database["HOST"], 
+                    user= self.database["USER"], 
+                    passwd=self.database["PASSWORD"],
+                    db="NAME")
 
         self.cursor = self.connection.cursor()
 
