@@ -5,7 +5,7 @@
 1. Go to the corresponding folder with the command line
 
 
-2. Cretae the environment using the requirements.txt file
+2. Create the environment using the requirements.txt file
 
     pipenv install -r requirements.txt
 
