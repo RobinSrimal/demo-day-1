@@ -4,29 +4,17 @@ import os
 
 class DBConnect:
 
-
     def __init__(self):
 
+       
+        self.connection = pymysql.connect(host="database-1.czzraanhc7rb.eu-central-1.rds.amazonaws.com", 
+                    user= "admin", 
+                    passwd="demoday1",
+                    db="birthdays")
 
-        if "RDS_HOSTNAME" in os.environ:
-
-            self.database = {
-                "NAME": os.environ["RDS_DB_NAME"],
-                "USER": os.environ["RDS_USERNAME"],
-                "PASSWORD": os.environ["RDS_PASSWORD"],
-                "HOST": os.environ["RDS_HOSTNAME"],
-                "PORT": os.environ["RDS_PORT"],
-            }
-
-
-        self.connection = pymysql.connect(host=self.database["HOST"], 
-                    user= self.database["USER"], 
-                    passwd=self.database["PASSWORD"],
-                    db="NAME")
 
         self.cursor = self.connection.cursor()
 
-    
     def name_is_in_table(self, name):
 
         sql = "SELECT * FROM birthday WHERE name=%s"
@@ -41,7 +29,6 @@ class DBConnect:
 
         try:
             
-
             if self.name_is_in_table(name):
 
                 response = {"error": "name is already in table"}
@@ -52,7 +39,6 @@ class DBConnect:
                 self.cursor.execute(sql, (name, birthday))
                 self.connection.commit()
                 response = {"success": "birthday added"}
-
 
         finally:
             
@@ -67,7 +53,6 @@ class DBConnect:
 
             if self.name_is_in_table(name):
 
-
                 sql = "SELECT * FROM birthday WHERE name=%s"
                 self.cursor.execute(sql,name)
                 id_number, name, birthday = self.cursor.fetchone()
@@ -78,12 +63,10 @@ class DBConnect:
 
                 response = {"error": "name not in table"}
 
-
         finally:
             
             self.connection.close()
-
-        
+    
         return response
 
         
